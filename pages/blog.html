@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog | Merchscape</title>
+  <meta name="description" content="Browse all articles on Merchscape">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+</head>
+<body>
+  <div id="header"></div>
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <h1>Blog</h1>
+        <p>Reviews, guides, and insights across every category</p>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <div class="filter-bar" id="filter-bar"></div>
+        <div class="cards-grid" id="articles-grid"></div>
+        <div id="pagination"></div>
+      </div>
+    </section>
+  </main>
+  <div id="footer"></div>
+  <div id="back-to-top"></div>
+  <script type="module">
+    import { initLayout } from '../js/app.js';
+    import { renderArticleCard } from '../components/article-card.js';
+    import { renderSearchBar, renderCategoryFilter } from '../components/search-bar.js';
+    import { renderPagination, bindPagination } from '../components/pagination.js';
+    import { articles } from '../js/data.js';
+    import { searchItems, filterByCategory, sortByDateDesc, paginate } from '../js/utils.js';
+
+    initLayout('blog', '../');
+    const PER_PAGE = 6;
+    let currentPage = 1;
+    let searchQuery = '';
+    let activeCategory = new URLSearchParams(location.search).get('category') || 'All';
+
+    const categories = [...new Set(articles.map(a => a.category))];
+    const filterBar = document.getElementById('filter-bar');
+    filterBar.innerHTML = renderSearchBar('Search articles...') + renderCategoryFilter(categories);
+
+    function render() {
+      let filtered = sortByDateDesc(articles);
+      filtered = filterByCategory(filtered, activeCategory);
+      filtered = searchItems(filtered, searchQuery, ['title', 'excerpt', 'category', 'author']);
+      const { items, totalPages } = paginate(filtered, currentPage, PER_PAGE);
+      document.getElementById('articles-grid').innerHTML = items.length
+        ? items.map(a => renderArticleCard(a, '../')).join('')
+        : '<div class="empty-state"><p>No articles found. Try adjusting your search or filter.</p></div>';
+      const pagEl = document.getElementById('pagination');
+      pagEl.innerHTML = renderPagination(currentPage, totalPages);
+      bindPagination(pagEl, page => { currentPage = page; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.category === activeCategory);
+      });
+    }
+
+    document.getElementById('search-input').addEventListener('input', e => {
+      searchQuery = e.target.value;
+      currentPage = 1;
+      render();
+    });
+    document.getElementById('category-filter').addEventListener('click', e => {
+      if (e.target.classList.contains('category-btn')) {
+        activeCategory = e.target.dataset.category;
+        currentPage = 1;
+        render();
+      }
+    });
+    if (activeCategory !== 'All') {
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.category === activeCategory);
+      });
+    }
+    render();
+  </script>
+</body>
+</html>

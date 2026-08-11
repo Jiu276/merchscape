@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Merchscape - Navigate the Merchandise Landscape</title>
+  <meta name="description" content="Curated product discoveries, retail trends, and merchandise strategies for savvy sellers.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <div id="header"></div>
+  <main>
+    <div id="hero"></div>
+    <section class="section">
+      <div class="container">
+        <h2 class="section-title fade-in">Latest Articles</h2>
+        <p class="section-subtitle fade-in">Expert insights, reviews, and guides to help you grow</p>
+        <div class="cards-grid" id="latest-articles"></div>
+        <div style="text-align:center;margin-top:2.5rem" class="fade-in">
+          <a href="pages/blog.html" class="btn btn-primary">View All Articles</a>
+        </div>
+      </div>
+    </section>
+    <section class="section" style="background:var(--bg-alt)">
+      <div class="container">
+        <h2 class="section-title fade-in">Featured Products</h2>
+        <p class="section-subtitle fade-in">Hand-picked tools and platforms we recommend</p>
+        <div class="cards-grid" id="featured-products"></div>
+        <div style="text-align:center;margin-top:2.5rem" class="fade-in">
+          <a href="pages/products.html" class="btn btn-outline">Browse Products</a>
+        </div>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <div class="cta-section fade-in">
+          <h2>Stay Ahead of the Curve</h2>
+          <p>Join thousands of readers getting the latest reviews and industry insights.</p>
+          <a href="pages/contact.html" class="btn btn-primary">Get in Touch</a>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div id="footer"></div>
+  <div id="back-to-top"></div>
+  <script type="module">
+    import { initLayout } from './js/app.js';
+    import { renderHero } from './components/hero.js';
+    import { renderArticleCard } from './components/article-card.js';
+    import { renderProductCard } from './components/product-card.js';
+    import { articles, products, siteConfig } from './js/data.js';
+    import { sortByDateDesc } from './js/utils.js';
+
+    initLayout('home');
+    document.getElementById('hero').innerHTML = renderHero({
+      title: siteConfig.tagline,
+      subtitle: siteConfig.description,
+      bgImage: siteConfig.heroImage,
+    });
+    const latest = sortByDateDesc(articles).slice(0, 3);
+    document.getElementById('latest-articles').innerHTML = latest.map(a => renderArticleCard(a)).join('');
+    document.getElementById('featured-products').innerHTML = products.slice(0, 3).map(p => renderProductCard(p)).join('');
+  </script>
+</body>
+</html>

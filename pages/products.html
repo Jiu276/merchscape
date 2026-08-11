@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products | Merchscape</title>
+  <meta name="description" content="Product recommendations and reviews on Merchscape">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/variables.css">
+  <link rel="stylesheet" href="../css/base.css">
+  <link rel="stylesheet" href="../css/components.css">
+</head>
+<body>
+  <div id="header"></div>
+  <main>
+    <section class="page-hero">
+      <div class="container">
+        <h1>Products</h1>
+        <p>Curated tools and platforms we have tested and recommend</p>
+      </div>
+    </section>
+    <section class="section">
+      <div class="container">
+        <div class="filter-bar" id="filter-bar"></div>
+        <div class="cards-grid" id="products-grid"></div>
+        <div id="pagination"></div>
+      </div>
+    </section>
+  </main>
+  <div id="footer"></div>
+  <div id="back-to-top"></div>
+  <script type="module">
+    import { initLayout } from '../js/app.js';
+    import { renderProductCard } from '../components/product-card.js';
+    import { renderSearchBar, renderCategoryFilter } from '../components/search-bar.js';
+    import { renderPagination, bindPagination } from '../components/pagination.js';
+    import { products } from '../js/data.js';
+    import { searchItems, filterByCategory, paginate } from '../js/utils.js';
+
+    initLayout('products', '../');
+    const PER_PAGE = 6;
+    let currentPage = 1;
+    let searchQuery = '';
+    let activeCategory = 'All';
+    const categories = [...new Set(products.map(p => p.category))];
+
+    document.getElementById('filter-bar').innerHTML =
+      renderSearchBar('Search products...') + renderCategoryFilter(categories);
+
+    function render() {
+      let filtered = filterByCategory(products, activeCategory);
+      filtered = searchItems(filtered, searchQuery, ['name', 'description', 'category']);
+      const { items, totalPages } = paginate(filtered, currentPage, PER_PAGE);
+      document.getElementById('products-grid').innerHTML = items.length
+        ? items.map(p => renderProductCard(p, '../')).join('')
+        : '<div class="empty-state"><p>No products found.</p></div>';
+      const pagEl = document.getElementById('pagination');
+      pagEl.innerHTML = renderPagination(currentPage, totalPages);
+      bindPagination(pagEl, page => { currentPage = page; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.category === activeCategory);
+      });
+    }
+
+    document.getElementById('search-input').addEventListener('input', e => {
+      searchQuery = e.target.value; currentPage = 1; render();
+    });
+    document.getElementById('category-filter').addEventListener('click', e => {
+      if (e.target.classList.contains('category-btn')) {
+        activeCategory = e.target.dataset.category; currentPage = 1; render();
+      }
+    });
+    render();
+  </script>
+</body>
+</html>
