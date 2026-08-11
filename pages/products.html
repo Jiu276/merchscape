@@ -30,14 +30,14 @@
     </section>
   </main>
   <div id="footer"></div>
-  <div id="back-to-top"></div>
+  <div id="back-to-top-mount"></div>
   <script type="module">
     import { initLayout } from '../js/app.js';
     import { renderProductCard } from '../components/product-card.js';
     import { renderSearchBar, renderCategoryFilter } from '../components/search-bar.js';
     import { renderPagination, bindPagination } from '../components/pagination.js';
     import { products } from '../js/data.js';
-    import { searchItems, filterByCategory, paginate } from '../js/utils.js';
+    import { searchItems, filterByCategory, paginate, initScrollAnimations } from '../js/utils.js';
 
     initLayout('products', '../');
     const PER_PAGE = 6;
@@ -62,6 +62,7 @@
       document.querySelectorAll('.category-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.category === activeCategory);
       });
+      initScrollAnimations();
     }
 
     document.getElementById('search-input').addEventListener('input', e => {

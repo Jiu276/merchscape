@@ -2,9 +2,13 @@
 .site-header{position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--card);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);transition:box-shadow var(--transition)}
 .site-header.scrolled{box-shadow:var(--shadow)}
 .header-inner{display:flex;align-items:center;justify-content:space-between;height:72px}
-.logo{display:flex;align-items:center;gap:.75rem;font-family:var(--font-heading);font-weight:700;font-size:1.35rem;color:var(--text);transition:opacity var(--transition)}
+.logo{display:flex;align-items:center;gap:.65rem;font-family:var(--font-heading);font-weight:700;font-size:1.25rem;color:var(--text);transition:opacity var(--transition);text-decoration:none}
 .logo:hover{color:var(--text);opacity:.85}
-.logo-icon{width:40px;height:40px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1.1rem}
+.logo-mark{width:36px;height:36px;color:var(--primary);flex-shrink:0;transition:transform var(--transition)}
+.logo:hover .logo-mark{transform:scale(1.05)}
+.logo-text{font-family:var(--font-body);font-weight:700;letter-spacing:-.02em;text-transform:lowercase}
+.site-footer .logo{color:#fff}
+.site-footer .logo-mark{color:var(--accent)}
 .nav-desktop{display:flex;align-items:center;gap:2rem}
 .nav-link{color:var(--text);font-weight:500;font-size:.95rem}
 .nav-link{padding:.5rem 1.25rem;border-radius:999px;transition:background var(--transition)}.nav-link:hover,.nav-link.active{background:var(--primary);color:#fff}
@@ -106,7 +110,8 @@
 .cta-section h2{font-size:2.25rem;margin-bottom:1rem}
 .cta-section p{opacity:.9;margin-bottom:2rem;max-width:500px;margin-left:auto;margin-right:auto}
 .cta-section .btn-primary{background:#fff;color:var(--primary)}
-.empty-state{text-align:center;padding:4rem 2rem;color:var(--text-muted)}
+.related-articles{margin-top:4rem;padding-top:3rem;border-top:1px solid var(--border)}
+.related-articles h2{font-size:1.75rem;margin-bottom:2rem;text-align:center}
 .empty-state svg{width:64px;height:64px;margin:0 auto 1.5rem;opacity:.4}
 @media(max-width:768px){
   .nav-desktop{display:none}

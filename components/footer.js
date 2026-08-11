@@ -1,4 +1,5 @@
 import { renderSocialWidget } from './social-widget.js';
+import { renderLogo } from './logo.js';
 
 /**
  * @param {string} prefix
@@ -11,10 +12,7 @@ export function renderFooter(prefix = '') {
       <div class="container">
         <div class="footer-grid">
           <div class="footer-brand">
-            <a href="${p}index.html" class="logo">
-              <span class="logo-icon">M</span>
-              <span>Merchscape</span>
-            </a>
+            ${renderLogo(p)}
             <p>Curated product discoveries, retail trends, and merchandise strategies for savvy sellers.</p>
           </div>
           <div class="footer-col">
@@ -41,7 +39,7 @@ export function renderFooter(prefix = '') {
           </div>
         </div>
         <div class="footer-bottom">
-          <span>&copy; ${new Date().getFullYear()} Merchscape. All rights reserved.</span>
+          <span>&copy; ${new Date().getFullYear()} merchscape. All rights reserved.</span>
           ${renderSocialWidget()}
         </div>
       </div>

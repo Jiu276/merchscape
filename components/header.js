@@ -1,3 +1,5 @@
+import { renderLogo } from './logo.js';
+
 /**
  * @param {string} activePage
  * @param {string} prefix
@@ -22,10 +24,7 @@ export function renderHeader(activePage = '', prefix = '') {
   return `
     <header class="site-header" id="site-header">
       <div class="container header-inner">
-        <a href="${p}index.html" class="logo" aria-label="Merchscape Home">
-          <span class="logo-icon">M</span>
-          <span>Merchscape</span>
-        </a>
+        ${renderLogo(p)}
         <nav class="nav-desktop" aria-label="Main navigation">${navLinks}</nav>
         <button class="menu-toggle" id="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
